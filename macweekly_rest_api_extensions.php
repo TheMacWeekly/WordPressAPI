@@ -23,6 +23,11 @@ add_action( 'rest_api_init', function() {
             }
         },
     ));
+    register_rest_field('post', 'excerpt_plaintext', array(
+        'get_callback' => function( $post_arr ) {
+            return get_the_excerpt($post_arr['id']);
+        },
+    ));
     register_rest_field('post', 'normal_thumbnail_url', array(
          'get_callback' => function( $post_arr ) {
             $url = get_the_post_thumbnail_url($post_arr['id'], 'thumbnail');
