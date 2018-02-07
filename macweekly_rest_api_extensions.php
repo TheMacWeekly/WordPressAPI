@@ -17,7 +17,9 @@ add_action( 'rest_api_init', function() {
                 return null;
             } else {
                 $author = new Guest_Author();
-                return $author->get_author_data( $guest_author_id, 'guest');
+                $author_data = $author->get_author_data( $guest_author_id, 'guest');
+                $author_data['img_url'] = get_the_post_thumbnail_url($author_data['id'], "thumbnail");
+                return $author_data;
             }
         },
     ));
