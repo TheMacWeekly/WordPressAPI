@@ -7,20 +7,17 @@ Author:       The Mac Weekly
 Author URI:   https://themacweekly.com
 License:      MIT
 */
-use Molongui\Authorship\Includes\Guest_Author;
+use Molongui\Authorship\Includes\Author;
 
 add_action( 'rest_api_init', function() {
     register_rest_field('post', 'guest_author', array(
         'get_callback' => function( $post_arr ) {
-            $guest_author_id = get_post_meta( $post_arr['id'], '_molongui_guest_author_id', true );
-            if ($guest_author_id == "") {
-                return null;
-            } else {
-                $author = new Guest_Author();
-                $author_data = $author->get_author_data( $guest_author_id, 'guest');
-                $author_data['img_url'] = get_the_post_thumbnail_url($author_data['id'], "thumbnail");
-                return $author_data;
-            }
+            $author = new Author();
+            $author_id = $author->get_main_author( $post_arr['id']);
+            $author_data = $author->get_data($author_id->id, $author_id->type);
+            $author_data['img_url'] = get_the_post_thumbnail_url($author_id->id, "thumbnail");
+
+            return $author_data;
         },
     ));
     register_rest_field('post', 'excerpt_plaintext', array(
